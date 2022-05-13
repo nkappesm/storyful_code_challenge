@@ -3,9 +3,27 @@ require 'basket'
 require 'book'
 
 RSpec.describe Basket do
+  context 'with correct parameters' do
+    let(:basket) { described_class.new(5) }
+
+    it 'responds to books' do
+      expect(basket).to respond_to(:books)
+    end
+
+    it 'responds to series_length' do
+      expect(basket).to respond_to(:series_length)
+    end
+  end
+
+  context 'with incorrect paramenters' do
+    it 'raises ArgumentError' do
+      expect { described_class.new(5, 6) }.to raise_error(ArgumentError)
+    end
+  end
+
   context 'single book' do
     let(:book1) { Book.new('Book1', 'Book Series', 8) }
-    let(:basket) { Basket.new() }
+    let(:basket) { Basket.new }
 
     it 'returns total price without discount' do
       basket.add_book(book1, 2)
@@ -46,11 +64,11 @@ RSpec.describe Basket do
 
     it 'applies 25% discount' do
       basket.add_book(book1, 2)
-      basket.add_book(book2, 1)
-      basket.add_book(book3, 1)
-      basket.add_book(book4, 1)
-      basket.add_book(book5, 1)
-      expect(basket.total_price).to eq(38)
+      basket.add_book(book2, 3)
+      basket.add_book(book3, 4)
+      basket.add_book(book4, 5)
+      basket.add_book(book5, 6)
+      expect(basket.total_price).to eq(130.4)
     end
   end
 end
